@@ -1,0 +1,71 @@
+-- Таблица системных блоков
+CREATE TABLE system_units (
+    serial_number VARCHAR(8) PRIMARY KEY,
+    computer_name VARCHAR(12) UNIQUE,
+    cpu VARCHAR(50),
+    ram_gb INT,
+    disk_size FLOAT(8,2),
+    disk_free FLOAT(8,2),
+    gpu VARCHAR(50),
+    location VARCHAR(10),
+    description VARCHAR(255)
+);
+
+-- Таблица мониторов
+CREATE TABLE monitors (
+    serial_number VARCHAR(25) PRIMARY KEY,
+    model VARCHAR(25),
+    diagonal DECIMAL(5,2) DEFAULT 24.00,
+    computer_name VARCHAR(12) NULL,
+    FOREIGN KEY (computer_name) REFERENCES system_units(computer_name)
+);
+
+INSERT INTO system_units (serial_number, computer_name, cpu, ram_gb, disk_size, disk_free, gpu, location, description) VALUES
+('07S00084', 'ru7-calc-49', '11th Gen Intel(R) Core(TM) i7-11700 @ 2.50GHz', 16, 237.43, 183.9, 'NVIDIA GeForce RTX 3050', 'Кабинет 6', '3 monitors'),
+('07S00083', 'ru7-calc-52', '11th Gen Intel(R) Core(TM) i7-11700 @ 2.50GHz', 32, 238.09, 145.76, 'NVIDIA GeForce RTX 3050', 'Кабинет 6', '4 monitors'),
+('07S00027', 'ru7-calc-53', '11th Gen Intel(R) Core(TM) i7-11700 @ 2.50GHz', 32, 237.43, 149.61, 'NVIDIA GeForce RTX 3050', 'Кабинет 6', '4 monitors'),
+('07S00017', 'ru7-calc-51', '11th Gen Intel(R) Core(TM) i7-11700 @ 2.50GHz', 32, 237.43, 160.64, 'Radeon RX 570 Series', 'Кабинет 6', '4 monitors'),
+('07S00080', 'ru7-calc-50', '11th Gen Intel(R) Core(TM) i7-11700 @ 2.50GHz', 32, 237.43, 153.39, 'NVIDIA GeForce RTX 3050', 'Кабинет 6', '3 monitors'),
+('07S00012', 'ru7-calc-55', '11th Gen Intel(R) Core(TM) i7-11700 @ 2.50GHz', 32, 237.43, 85.28, 'NVIDIA GeForce RTX 3050', 'Кабинет 6', '3 monitors'),
+('07S00088', 'ru7-calc-56', '11th Gen Intel(R) Core(TM) i7-11700 @ 2.50GHz', 32, 237.43, 169.15, 'NVIDIA GeForce RTX 3050', 'Кабинет 6', '3 monitors'),
+('07S00082', 'ru7-calc-54', '11th Gen Intel(R) Core(TM) i7-11700 @ 2.50GHz', 32, 237.43, 149.61, 'NVIDIA GeForce RTX 3050', 'Кабинет 6', '4 monitors'),
+('07S00087', 'ru7-calc-57', '11th Gen Intel(R) Core(TM) i7-11700 @ 2.50GHz', 32, 237.43, 158.11, 'NVIDIA GeForce RTX 3050', 'Кабинет 6', '4 monitors'),
+('07S00002', 'ru7-calc-48', '11th Gen Intel(R) Core(TM) i7-11700 @ 2.50GHz', 32, 237.43, 162.9, 'NVIDIA GeForce RTX 3050', 'Кабинет 6', '4 monitors');
+
+INSERT INTO monitors (serial_number, model, computer_name) VALUES
+('UK02143074420','PHL C212','ru7-calc-49'),
+('UK02143074372','PHL C212','ru7-calc-49'),
+('UK02143074802','PHL C212','ru7-calc-49'),
+('UK02143074731','PHL C212','ru7-calc-52'),
+('UK02143074416','PHL C212','ru7-calc-52'),
+('UK02143074381','PHL C212','ru7-calc-52'),
+('UK02143074020','PHL C212','ru7-calc-52'),
+('UK02143074367','PHL C212','ru7-calc-53'),
+('UK02143074366','PHL C212','ru7-calc-53'),
+('UK02143074034','PHL C212','ru7-calc-53'),
+('UK02143073979','PHL C212','ru7-calc-53'),
+('UK02143074411','PHL C212','ru7-calc-51'),
+('UK02143074006','PHL C212','ru7-calc-51'),
+('UK02143074383','PHL C212','ru7-calc-51'),
+('UK02143074807','PHL C212','ru7-calc-51'),
+('UK02143073992','PHL C212','ru7-calc-50'),
+('UK02143074377','PHL C212','ru7-calc-50'),
+('UK02143074805','PHL C212','ru7-calc-50'),
+('UK02143074729','PHL C212','ru7-calc-55'),
+('UK02143074801','PHL C212','ru7-calc-55'),
+('UK02143074036','PHL C212','ru7-calc-55'),
+('UK02143073982','PHL C212','ru7-calc-56'),
+('UK02143073995','PHL C212','ru7-calc-56'),
+('UK02143074066','PHL C212','ru7-calc-56'),
+('UK02143074738','PHL C212','ru7-calc-54'),
+('UK02143074386','PHL C212','ru7-calc-54'),
+('UK02143074359','PHL C212','ru7-calc-54'),
+('UK02143074399','PHL C212','ru7-calc-54'),
+('UK02143073985','PHL C212','ru7-calc-57'),
+('UK02143074387','PHL C212','ru7-calc-57'),
+('UK02143074419','PHL C212','ru7-calc-57'),
+('UK02143074385','PHL C212','ru7-calc-57'),
+('UK02143074355','PHL C212','ru7-calc-48'),
+('UK02143073977','PHL C212','ru7-calc-48'),
+('UK02143074357','PHL C212','ru7-calc-48'),
+('UK02143074405','PHL C212','ru7-calc-48');
