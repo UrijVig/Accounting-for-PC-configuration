@@ -1,18 +1,35 @@
 <?php 
-    class Route{
-        public static function start(): void
-        {
+    class Route {
+        public static function start(): void {
             $controllerName = "Main";
             $actionName = "index";
-            $uri = $_SERVER["REQUEST_URI"];
+            
+            $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
             $uri = substr($uri, 1);
-            if ($uri) $actionName = $uri;
-
+            
+            if ($uri) {
+                $parts = explode('/', $uri);
+                $actionName = $parts[0];
+                
+                // Дополнительные параметры из URL
+                $params = array_slice($parts, 1);
+            }
+            
             $controllerName = $controllerName . "Controller";
-            $actionName = "action" . $actionName;
-            echo $actionName;
-            $controller = new $controllerName();
-            if (method_exists($controller, $actionName)) $controller->$actionName();
-            else $controller->action404();
+            $actionName = "action" . ucfirst($actionName);
+            
+            try {
+                $controller = new $controllerName();
+                
+                if (method_exists($controller, $actionName)) {
+                    // Передаем метод запроса и параметры
+                    $controller->$actionName($_SERVER['REQUEST_METHOD'], $params ?? []);
+                } else {
+                    $controller->action404();
+                }
+            } catch (Throwable $e) {
+                // Обработка ошибок
+                (new MainController())->action500();
+            }
         }
     }

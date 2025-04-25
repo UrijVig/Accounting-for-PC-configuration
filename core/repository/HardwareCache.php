@@ -19,10 +19,12 @@
             $this->systemUnitsCache = [];
         }
         public function getSystemUnitsCache() {
+            $this->loadCache();
             return $this->systemUnitsCache;
         }
         
         public function getMonitorsCache() {
+            $this->loadCache();
             return $this->monitorsCache;
         }
 

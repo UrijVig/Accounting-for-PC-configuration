@@ -10,3 +10,96 @@ footer {
     text-align: center;
     font-style: italic;
 }
+
+nav ul {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+  
+nav li {
+    margin-right: 20px; 
+}
+
+nav a {
+    color: #000;
+    text-decoration: none;
+}
+
+/* Основные стили */
+.system-unit {
+    background: #f8f9fa;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    padding: 20px;
+    margin-bottom: 25px;
+    border-left: 4px solid #4e73df;
+}
+
+.system-unit h3 {
+    color: #2e3a4d;
+    margin-top: 0;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #e1e5eb;
+}
+
+/* Стили для блока с информацией */
+.info {
+    background: white;
+    padding: 15px;
+    border-radius: 6px;
+    margin-bottom: 15px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 10px;
+}
+
+.info p {
+    margin: 5px 0;
+    color: #4a4a4a;
+    font-size: 14px;
+}
+
+.info p::before {
+    content: "•";
+    color: #4e73df;
+    margin-right: 8px;
+}
+
+/* Стили для мониторов */
+.monitors {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 15px;
+}
+
+.monitor {
+    background: white;
+    padding: 15px;
+    border-radius: 6px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    border-top: 3px solid #1cc88a;
+}
+
+.monitor p {
+    margin: 5px 0;
+    color: #4a4a4a;
+    font-size: 13px;
+}
+
+.monitor p:first-child {
+    font-weight: bold;
+    color: #2e3a4d;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+    .info {
+        grid-template-columns: 1fr;
+    }
+    
+    .monitors {
+        grid-template-columns: 1fr;
+    }
+}

@@ -5,7 +5,7 @@
         public function __construct($view) {
             $this->view = $view;
         }
-        abstract protected function render($str);
+        abstract protected function render($val);
 
         public function action404()
         {

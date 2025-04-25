@@ -1,22 +1,3 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="<?=$meta_desc?>" >
-    <meta name="keywords" content="<?=$meta_key?>">
-    <link rel="stylesheet" type="text/css" href="public/styles/style.css">
-    <title><?=$title?></title>
-</head>
-<body>
-    <header>
-        <h1>Welcome to page!</h1>
-    </header>
-    <hr>
+    <?=$header?>
     <div id="content"><?=$content?></div>
-    <hr>
-    <footer>
-        comming soon!
-    </footer>
-</body>
-</html>
+    <?=$footer?>

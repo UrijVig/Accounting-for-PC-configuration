@@ -11,12 +11,34 @@
 <body>
     <header>
         <h1>Welcome to page!</h1>
+        <nav>
+            <ul>
+            <li><a href="/">Главная страница</a></li>
+            <li><a href="/info">Инфо!</a></li>
+        </ul>
+        </nav>
     </header>
     <hr>
     <div id="content">
         <h1>Main page</h1>
         <p>it's works</p>
-
+        <form class="form" action="/createSystemUnit" method="post">
+            <input type="text" name="serial_number" placeholder="serial_number">
+            <input type="text" name="computer_name" placeholder="computer_name">
+            <input type="text" name="cpu" placeholder="cpu">
+            <input type="text" name="ram_gb" placeholder="ram_gb">
+            <input type="text" name="disk_size" placeholder="disk_size">
+            <input type="text" name="disk_free" placeholder="disk_free">
+            <input type="text" name="gpu" placeholder="gpu">
+            <input type="text" name="location" placeholder="location">
+            <input type="text" name="description" placeholder="description">
+        </form>
+        <form class="form" action="/createSystemUnit" method="post">
+            <input type="text" name="serial_number" placeholder="serial_number">
+            <input type="text" name="model" placeholder="model">
+            <input type="text" name="diagonal" placeholder="diagonal">
+            <input type="text" name="computer_name" placeholder="computer_name">
+        </form>
     </div>
     <hr>
     <footer>
