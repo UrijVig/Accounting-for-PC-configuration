@@ -18,29 +18,77 @@
             $this->render($content);
         }
 
-        public function actionCreateSystemUnit(){
-            $this->title = "CreateUnit";
-            $this->meta_desc = "Добавление системного блока";
-            $this->meta_key = "создание";
-            $content = $this->view->render("createSystemUnit", array(), true);
-            $this->render($content);
+        public function actionCreateSystemUnit($method, $action){
+            if ($method === "POST"){                
+                $valideData = $this->validateData();
+                if ($valideData['errors']){
+                    $this->title = "CreateUnit";
+                    $this->meta_desc = "Добавление системного блока";
+                    $this->meta_key = "создание";
+                    $content = $this->view->render("createSystemUnit", ['data' => $valideData['data'], 'errors' => $valideData['errors']], true);
+                    $this->render($content);
+                }else{
+                    try {
+                        $this->mainService->addSystemUnit($valideData['data']);
+                        header('Location: /info');
+                        exit;
+                    } catch (PDOException $e) {
+                        $this->title = "CreateUnit - Error";
+                        $content = $this->view->render("createSystemUnit", [
+                        'data' => $valideData['data'],
+                        'errors' => ['Ошибка сохранения в базу данных' . $e->getMessage()]
+                        ], true);
+                        $this->render($content);
+                    }
+                }
+            } else{
+                $this->title = "CreateUnit";
+                $this->meta_desc = "Добавление системного блока";
+                $this->meta_key = "создание";
+                $content = $this->view->render("createSystemUnit", array(), true);
+                $this->render($content);
+            }
+            
         }
-        public function actionCreateMonitor(){
-            $this->title = "createMonitor";
-            $this->meta_desc = "createMonitor";
-            $this->meta_key = "createMonitor";
-            $content = $this->view->render("createMonitor", array(), true);
-            $this->render($content);
+        public function actionCreateMonitor($method, $action){
+            if ($method === "POST"){                
+                $valideData = $this->validateData();
+                if ($valideData['errors']){
+                    $this->title = "createMonitor";
+                    $this->meta_desc = "createMonitor";
+                    $this->meta_key = "createMonitor";
+                    $content = $this->view->render("createMonitor", ['data' => $valideData['data'], 'errors' => $valideData['errors']], true);
+                    $this->render($content);
+                } else {
+                    try {
+                        $this->mainService->addMonitor($valideData['data']);
+                        header('Location: /info');
+                        exit;
+                    } catch (PDOException $e) {
+                        $this->title = "CreateMonitor - Error";
+                        $content = $this->view->render("createMonitor", [
+                        'data' => $valideData['data'],
+                        'errors' => ['Ошибка сохранения в базу данных' . $e->getMessage()]
+                        ], true);
+                        $this->render($content);
+                    }
+                }
+            } else{
+                $this->title = "createMonitor";
+                $this->meta_desc = "createMonitor";
+                $this->meta_key = "createMonitor";
+                $content = $this->view->render("createMonitor", array(), true);
+                $this->render($content);
+            }
         }
         public function actionInfo() {
             $this->title = "Info";
             $this->meta_desc = "Описание позиций";
             $this->meta_key = "описание, описание позиций";
             
-            $data = $this->mainService->getProducts();  // Переименовать метод в getProducts()
+            $data = $this->mainService->getProducts();
             $content = $this->view->render("info", [
-                'system_units' => $data,
-                'monitors' => $data
+                'system_units' => $data
             ], true);
             $this->render($content);
         }
@@ -60,15 +108,6 @@
             $this->meta_key = "500";
             $content = $this->view->render("500", array(), true);
             $this->render($content);
-        }
-
-        public function actionSystemUnit($method, $action){
-            if ($method === "POST"){
-                $fun = $action[0] . "SystemUnit";
-                if (method_exists($this->mainService, $fun)){
-                    $this->mainService->$fun();
-                }
-            }
         }
         public function actionMonitor($method, $action){
             if ($method === "POST"){
@@ -96,5 +135,20 @@
             $params["footer"] = $this->getFooter();
             $params["content"] = $val;
             $this->view->render(MAIN_LAYOUT, $params);
+        }
+
+        protected function validateData(){
+            $errors = [];
+            $data = [];
+            foreach ($_POST as $key=>$val) {
+                $data[$key] = trim($val) ?? '';
+            }
+            foreach ($data as $key => $val) {
+                if ($val === '') $errors[] = "$key is empty!";                           
+            }
+            return [
+                'data' => $data,
+                'errors' => $errors
+            ];
         }
     }

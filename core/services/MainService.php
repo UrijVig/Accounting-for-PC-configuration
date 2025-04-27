@@ -4,7 +4,7 @@
         private DataBaseConnection $dbc;
         private DataSource $ds;
         private HardwareRepository $repo;
-        private HardwareCache $cache;
+
         public function __construct(
             ?DataBaseConnection $dbc = null,
             ?DataSource $ds = null,
@@ -20,15 +20,13 @@
             );
             
             $this->ds = $ds ?? new DataSource($this->dbc);
-            $this->cache = $cache ?? new HardwareCache($this->ds);
-            $this->repo = $repo ?? new HardwareRepository($this->dbc, $this->cache);
+            $this->repo = $repo ?? new HardwareRepository($this->ds);
         }
 
         public function getProducts(): array {
-            $systemUnits = $this->cache->getSystemUnitsCache();
-            $monitors = $this->cache->getMonitorsCache();
-            
-            // Группируем мониторы по computer_name
+            $systemUnits = $this->repo->getSystemUnitsCache();
+            $monitors = $this->repo->getMonitorsCache();
+
             $monitorsByComputer = [];
             foreach ($monitors as $monitor) {
                 $monitorsByComputer[$monitor['computer_name']][] = $monitor;
@@ -43,14 +41,18 @@
             return $result;
         }
 
-        public function addSystemUnit(){
-            echo "<pre>";
-            print_r($_POST);
-            echo "<pre>";
+        public function addSystemUnit($data){
+            try {
+                $this->repo->addPosition("system_units", $data);
+            } catch (PDOException $e) {
+                throw new PDOException($e);
+            }
         }
-        public function addMonitor(){
-            echo "<pre>";
-            print_r($_POST);
-            echo "<pre>";
+        public function addMonitor($data){
+            try {
+                return $this->repo->addPosition("monitors", $data);
+            } catch (PDOException $e) {
+                throw new PDOException($e);
+            }
         }
     }

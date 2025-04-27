@@ -2,30 +2,36 @@
     class HardwareCache{
         private $systemUnitsCache = [];
         private $monitorsCache = [];
+
         private $isActual = false;
-        public function __construct(private DataSource $ds) {
+        public function __construct(private HardwareRepository $hardwareRepository) {
         }
 
-        public function loadCache() {
-            if (!$this->isActual){
-                $this->systemUnitsCache = $this->ds->getDataFromTable('system_units');
-                $this->monitorsCache = $this->ds->getDataFromTable('monitors');
-                $this->isActual = true;
-            }
-        }
         public function invalidate(){
             $this->isActual = false;
             $this->monitorsCache = [];
             $this->systemUnitsCache = [];
         }
+
         public function getSystemUnitsCache() {
-            $this->loadCache();
             return $this->systemUnitsCache;
         }
         
         public function getMonitorsCache() {
-            $this->loadCache();
             return $this->monitorsCache;
+        }
+        public function setSystemUnitsCache($systemUnitsCache) {
+            $this->systemUnitsCache = $systemUnitsCache;
+        }
+        
+        public function setMonitorsCache($monitorsCache) {
+            $this->monitorsCache = $monitorsCache;
+        }
+        public function setActual($mark = true){
+            $this->isActual = $mark;
+        }
+        public function isActual(){
+            return $this->isActual;
         }
 
         public function getSystemUnitBySerialNumber($serialNumber) {

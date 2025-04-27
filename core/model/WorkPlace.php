@@ -8,7 +8,10 @@ class WorkPlace{
     }            
     public function addMonitor(Monitor $monitor){
         $this->monitors[] = $monitor;
-    }        
+    }      
+    public function addAllMonitor(array $monitors){
+        $this->monitors = $monitors;
+    }  
     public function getMonitors(){
         return $this->monitors;
     }

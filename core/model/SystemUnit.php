@@ -11,15 +11,15 @@
         private $description;
 
         public function __construct(
-            string $serial_number,
-            string $computer_name,
-            string $cpu,
-            int $ram_gb,
-            float $disk_size,
-            float $disk_free,
-            string $gpu,
-            string $location,
-            string $description
+            string $serial_number = '',
+            string $computer_name = '',
+            string $cpu = '',
+            int $ram_gb = 0,
+            float $disk_size = 0,
+            float $disk_free = 0,
+            string $gpu = '',
+            string $location = '',
+            string $description = ''
         ) {
             $this->serialNumber = $serial_number;
             $this->computerName = $computer_name;
