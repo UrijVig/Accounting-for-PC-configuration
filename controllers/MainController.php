@@ -81,16 +81,33 @@
                 $this->render($content);
             }
         }
-        public function actionInfo() {
-            $this->title = "Info";
-            $this->meta_desc = "Описание позиций";
-            $this->meta_key = "описание, описание позиций";
-            
-            $data = $this->mainService->getProducts();
-            $content = $this->view->render("info", [
-                'system_units' => $data
-            ], true);
-            $this->render($content);
+        public function actionInfo($method) {
+            if (isset($_POST['delete']) && isset($_POST['serial_number'])){
+                try {
+                    switch ($_POST['delete']) {
+                        case 'system_units':
+                            $this->mainService->deleteSystemUnit($_POST['serial_number']);
+                            break;
+                        case 'monitor':
+                            $this->mainService->deleteMonitor($_POST['serial_number']);
+                            break;                    
+                        default:
+                            echo "Что-то пошло не так!";
+                            break;
+                    }
+                    header('Location: /info');
+                    exit;
+                } catch (PDOException $e) {
+                    echo "Ошибка при удалении позиции!" . $e->getMessage();
+                }
+            } else{
+                $this->title = "Info";
+                $this->meta_desc = "Описание позиций";
+                $this->meta_key = "описание, описание позиций";            
+                $data = $this->mainService->getProducts();
+                $content = $this->view->render("info", ['system_units' => $data], true);
+                $this->render($content);
+            }
         }
 
         public function action404(){

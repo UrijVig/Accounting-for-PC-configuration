@@ -11,6 +11,11 @@
                 <p class="info-item">GPU: <?= htmlspecialchars($sdata['gpu'] ?? 'N/A') ?></p>
                 <p class="info-item">Location: <?= htmlspecialchars($sdata['location'] ?? 'N/A') ?></p>
                 <p class="info-item">Description: <?= htmlspecialchars($sdata['description'] ?? 'N/A') ?></p>
+                <form action="/info" method="post">
+                <input type="hidden" name="delete" value="system_units">
+                <input type="hidden" name="serial_number" value="<?= htmlspecialchars($sdata['serial_number'] ?? 'N/A') ?>">
+                <input type="submit" value="DELETE!">
+            </form>
             </div>        
             <div class="monitors">
                 <?php foreach (($sdata['monitors'] ?? []) as $mdata): ?>
@@ -18,6 +23,11 @@
                         <p>Model: <?= htmlspecialchars($mdata['model'] ?? 'N/A') ?></p>
                         <p>Serial: <?= htmlspecialchars($mdata['serial_number'] ?? 'N/A') ?></p>
                         <p>Diagonal: <?= htmlspecialchars($mdata['diagonal'] ?? 'N/A') ?>"</p>
+                        <form action="/info" method="post">
+                        <input type="hidden" name="delete" value="monitor">
+                        <input type="hidden" name="serial_number" value="<?= htmlspecialchars($mdata['serial_number'] ?? 'N/A') ?>">
+                        <input type="submit" value="DELETE!">
+                        </form>
                     </div>
                 <?php endforeach; ?>
             </div>
