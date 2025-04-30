@@ -1,8 +1,8 @@
 <?php 
  class CacheRepository implements CacheRepositoryInterface{
     private $repository = [];
-    public function __construct(private DBRepository $dBRepository) {
-        foreach (DB_TABLE_NAMES as $table) {
+    public function __construct(private DBRepository $dBRepository,array $listOfTables) {
+        foreach ($listOfTables as $table) {
             $this->repository[$table] = new DataCache( $table);
         }
     }

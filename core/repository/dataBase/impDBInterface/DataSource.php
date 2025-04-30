@@ -36,14 +36,14 @@
         }
 
         
-        public function updateByTarget(string $tableName , string $target, array $data){
+        public function updateByTarget(string $tableName, string $column, string $target, array $data){
             try {
                 $updates =[];
                 foreach ($data as $key => $val) {
                     $updates [] = "`$key` = :$key";
                 }
                 $stmt = $this->dbc->getPDO()->
-                    prepare("UPDATE `$tableName` SET " . implode(', ', $updates) . "WHERE serial_number = :serial_number");
+                    prepare("UPDATE `$tableName` SET " . implode(', ', $updates) . "WHERE `$column` = :serial_number");
                 foreach ($data as $key=>$val) {
                     $paramsType = match (true) {
                         is_int($val) => PDO::PARAM_INT,
@@ -57,9 +57,9 @@
                 throw $e;
             }
         }
-        public function deleteByTarget(string $tableName, string $target){
+        public function deleteByTarget(string $tableName, string $column, string $target){
             try {
-                $stmt = $this->dbc->getPDO()->prepare("DELETE FROM `$tableName` WHERE serial_number = :serial_number");
+                $stmt = $this->dbc->getPDO()->prepare("DELETE FROM `$tableName` WHERE `$column` = :serial_number");
                 $stmt->bindValue(":serial_number", $target, PDO::PARAM_STR);
                 return $stmt->execute();
             } catch (PDOException $e) {

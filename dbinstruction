@@ -1,4 +1,69 @@
--- Таблица системных блоков
+CD C:\MAMP\bin\mysql\bin
+
+CREATE DATABASE storagedb;
+
+
+CREATE TABLE system_units (
+    serial_number VARCHAR(8) PRIMARY KEY,
+    brand VARCHAR(20),
+    cpu VARCHAR(50),
+    ram_gb INT,
+    disk_size FLOAT(8,2),
+    disk_free FLOAT(8,2),
+    gpu VARCHAR(50),
+    description VARCHAR(255)
+);
+CREATE TABLE peripheries (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(20),
+    amount INT,
+    description VARCHAR(255)
+);
+
+CREATE TABLE ups (
+    serial_number VARCHAR(8) PRIMARY KEY,
+    brand VARCHAR(20),
+    model VARCHAR(25),
+    power INT,
+    description VARCHAR(255)
+);
+
+CREATE TABLE monitors (
+    serial_number VARCHAR(25) PRIMARY KEY,
+    brand VARCHAR(20),
+    model VARCHAR(25),
+    diagonal DECIMAL(5,2) DEFAULT 24.00,
+    description VARCHAR(255)
+);
+
+
+INSERT INTO system_units (serial_number, brand, cpu, ram_gb, disk_size, disk_free, gpu, description) VALUES
+('SN001', 'Dell', 'Intel Core i7-12700', 16, 512.00, 387.50, 'NVIDIA RTX 3060', 'Основной рабочий компьютер'),
+('SN002', 'HP', 'AMD Ryzen 5 5600X', 32, 1024.00, 845.25, 'AMD Radeon RX 6700', 'Компьютер для графики'),
+('SN003', 'Lenovo', 'Intel Core i5-12400', 8, 256.00, 128.75, 'Intel UHD Graphics 730', 'Офисный компьютер'),
+('SN004', 'Asus', 'AMD Ryzen 7 5800X', 64, 2048.00, 1536.50, 'NVIDIA RTX 3080', 'Сервер для разработки');
+INSERT INTO peripheries (name, amount, description) VALUES
+('Keyboard', 15, 'Проводные клавиатуры Logitech'),
+('Mouse', 15, 'Беспроводные мыши MX Master'),
+('Webcam', 5, 'Веб-камеры 1080p'),
+('Headset', 8, 'Игровые гарнитуры с микрофоном'),
+('USB Hub', 10, '4-портовые USB-концентраторы');
+INSERT INTO ups (serial_number, brand, model, power, description) VALUES
+('UPS001', 'APC', 'Back-UPS 1500', 865, 'Основной ИБП для серверной'),
+('UPS002', 'Eaton', '5E 1000i', 600, 'Резервный ИБП'),
+('UPS003', 'CyberPower', 'CP1500PFCLCD', 900, 'Для рабочих станций'),
+('UPS004', 'Tripp Lite', 'SMART1500LCD', 800, 'Для сетевого оборудования');
+INSERT INTO monitors (serial_number, brand, model, diagonal, description) VALUES
+('MN001', 'Dell', 'UltraSharp U2723QE', 27.00, '4K монитор для дизайна'),
+('MN002', 'LG', '27GN850-B', 27.00, 'Игровой монитор 144Hz'),
+('MN003', 'Samsung', 'Odyssey G7', 32.00, 'Игровой изогнутый монитор'),
+('MN004', 'HP', 'E27m G4', 27.00, 'Офисный монитор с USB-C'),
+('MN005', 'ASUS', 'ProArt PA278QV', 27.00, 'Монитор для цветокоррекции');
+
+___________________________________________
+CREATE DATABASE officedb;
+
+
 CREATE TABLE system_units (
     serial_number VARCHAR(8) PRIMARY KEY,
     computer_name VARCHAR(12) UNIQUE,
@@ -7,65 +72,164 @@ CREATE TABLE system_units (
     disk_size FLOAT(8,2),
     disk_free FLOAT(8,2),
     gpu VARCHAR(50),
-    location VARCHAR(10),
-    description VARCHAR(255)
+    location VARCHAR(20),
+    description VARCHAR(255),
+    FOREIGN KEY (location) REFERENCES locations(name)
 );
 
--- Таблица мониторов
+CREATE TABLE peripheries (
+    keyboard BOOLEAN DEFAULT FALSE,
+    mouse BOOLEAN DEFAULT FALSE,
+    mousepad BOOLEAN DEFAULT FALSE,
+    computer_name VARCHAR(12) PRIMARY KEY,
+    description VARCHAR(255),
+    FOREIGN KEY (computer_name) REFERENCES system_units(computer_name)
+);
+
+CREATE TABLE ups (
+    serial_number VARCHAR(8) PRIMARY KEY,
+    brand VARCHAR(20),
+    model VARCHAR(25),
+    power INT,
+    computer_name VARCHAR(12) NULL,
+    FOREIGN KEY (computer_name) REFERENCES system_units(computer_name),
+    description VARCHAR(255)
+);
 CREATE TABLE monitors (
     serial_number VARCHAR(25) PRIMARY KEY,
     model VARCHAR(25),
     diagonal DECIMAL(5,2) DEFAULT 24.00,
     computer_name VARCHAR(12) NULL,
-    FOREIGN KEY (computer_name) REFERENCES system_units(computer_name)
+    FOREIGN KEY (computer_name) REFERENCES system_units(computer_name),
+    description VARCHAR(255)
+);
+CREATE TABLE locations (
+    name VARCHAR(20) PRIMARY KEY,
+    description VARCHAR(255)
 );
 
-INSERT INTO system_units (serial_number, computer_name, cpu, ram_gb, disk_size, disk_free, gpu, location, description) VALUES
-('07S00084', 'ru7-calc-49', '11th Gen Intel(R) Core(TM) i7-11700 @ 2.50GHz', 16, 237.43, 183.9, 'NVIDIA GeForce RTX 3050', 'Кабинет 6', '3 monitors'),
-('07S00083', 'ru7-calc-52', '11th Gen Intel(R) Core(TM) i7-11700 @ 2.50GHz', 32, 238.09, 145.76, 'NVIDIA GeForce RTX 3050', 'Кабинет 6', '4 monitors'),
-('07S00027', 'ru7-calc-53', '11th Gen Intel(R) Core(TM) i7-11700 @ 2.50GHz', 32, 237.43, 149.61, 'NVIDIA GeForce RTX 3050', 'Кабинет 6', '4 monitors'),
-('07S00017', 'ru7-calc-51', '11th Gen Intel(R) Core(TM) i7-11700 @ 2.50GHz', 32, 237.43, 160.64, 'Radeon RX 570 Series', 'Кабинет 6', '4 monitors'),
-('07S00080', 'ru7-calc-50', '11th Gen Intel(R) Core(TM) i7-11700 @ 2.50GHz', 32, 237.43, 153.39, 'NVIDIA GeForce RTX 3050', 'Кабинет 6', '3 monitors'),
-('07S00012', 'ru7-calc-55', '11th Gen Intel(R) Core(TM) i7-11700 @ 2.50GHz', 32, 237.43, 85.28, 'NVIDIA GeForce RTX 3050', 'Кабинет 6', '3 monitors'),
-('07S00088', 'ru7-calc-56', '11th Gen Intel(R) Core(TM) i7-11700 @ 2.50GHz', 32, 237.43, 169.15, 'NVIDIA GeForce RTX 3050', 'Кабинет 6', '3 monitors'),
-('07S00082', 'ru7-calc-54', '11th Gen Intel(R) Core(TM) i7-11700 @ 2.50GHz', 32, 237.43, 149.61, 'NVIDIA GeForce RTX 3050', 'Кабинет 6', '4 monitors'),
-('07S00087', 'ru7-calc-57', '11th Gen Intel(R) Core(TM) i7-11700 @ 2.50GHz', 32, 237.43, 158.11, 'NVIDIA GeForce RTX 3050', 'Кабинет 6', '4 monitors'),
-('07S00002', 'ru7-calc-48', '11th Gen Intel(R) Core(TM) i7-11700 @ 2.50GHz', 32, 237.43, 162.9, 'NVIDIA GeForce RTX 3050', 'Кабинет 6', '4 monitors');
+-- Заполняем таблицу locations (кабинеты)
+INSERT INTO locations (name, description) VALUES
+('Кабинет 101', 'Основной рабочий кабинет'),
+('Кабинет 205', 'Кабинет разработчиков'),
+('Кабинет 310', 'Серверная и тестирование');
 
-INSERT INTO monitors (serial_number, model, computer_name) VALUES
-('UK02143074420','PHL C212','ru7-calc-49'),
-('UK02143074372','PHL C212','ru7-calc-49'),
-('UK02143074802','PHL C212','ru7-calc-49'),
-('UK02143074731','PHL C212','ru7-calc-52'),
-('UK02143074416','PHL C212','ru7-calc-52'),
-('UK02143074381','PHL C212','ru7-calc-52'),
-('UK02143074020','PHL C212','ru7-calc-52'),
-('UK02143074367','PHL C212','ru7-calc-53'),
-('UK02143074366','PHL C212','ru7-calc-53'),
-('UK02143074034','PHL C212','ru7-calc-53'),
-('UK02143073979','PHL C212','ru7-calc-53'),
-('UK02143074411','PHL C212','ru7-calc-51'),
-('UK02143074006','PHL C212','ru7-calc-51'),
-('UK02143074383','PHL C212','ru7-calc-51'),
-('UK02143074807','PHL C212','ru7-calc-51'),
-('UK02143073992','PHL C212','ru7-calc-50'),
-('UK02143074377','PHL C212','ru7-calc-50'),
-('UK02143074805','PHL C212','ru7-calc-50'),
-('UK02143074729','PHL C212','ru7-calc-55'),
-('UK02143074801','PHL C212','ru7-calc-55'),
-('UK02143074036','PHL C212','ru7-calc-55'),
-('UK02143073982','PHL C212','ru7-calc-56'),
-('UK02143073995','PHL C212','ru7-calc-56'),
-('UK02143074066','PHL C212','ru7-calc-56'),
-('UK02143074738','PHL C212','ru7-calc-54'),
-('UK02143074386','PHL C212','ru7-calc-54'),
-('UK02143074359','PHL C212','ru7-calc-54'),
-('UK02143074399','PHL C212','ru7-calc-54'),
-('UK02143073985','PHL C212','ru7-calc-57'),
-('UK02143074387','PHL C212','ru7-calc-57'),
-('UK02143074419','PHL C212','ru7-calc-57'),
-('UK02143074385','PHL C212','ru7-calc-57'),
-('UK02143074355','PHL C212','ru7-calc-48'),
-('UK02143073977','PHL C212','ru7-calc-48'),
-('UK02143074357','PHL C212','ru7-calc-48'),
-('UK02143074405','PHL C212','ru7-calc-48');
+-- Заполняем таблицу system_units (системные блоки)
+INSERT INTO system_units (serial_number, computer_name, cpu, ram_gb, disk_size, disk_free, gpu, location, description) VALUES
+-- Кабинет 101 (4 ПК)
+('SU10101', 'PC-101-01', 'Intel Core i5-12400', 16, 512.00, 256.50, 'Intel UHD 730', 'Кабинет 101', 'Основной рабочий ПК'),
+('SU10102', 'PC-101-02', 'AMD Ryzen 5 5600X', 32, 1024.00, 768.25, 'NVIDIA GTX 1660', 'Кабинет 101', 'ПК для графики'),
+('SU10103', 'PC-101-03', 'Intel Core i3-12100', 8, 256.00, 128.75, 'Intel UHD 730', 'Кабинет 101', 'Резервный ПК'),
+('SU10104', 'PC-101-04', 'Intel Core i7-12700', 64, 2048.00, 1536.00, 'NVIDIA RTX 3060', 'Кабинет 101', 'Мощный ПК для рендеринга'),
+
+-- Кабинет 205 (5 ПК)
+('SU20501', 'PC-205-01', 'AMD Ryzen 7 5800X', 32, 1024.00, 896.50, 'NVIDIA RTX 3070', 'Кабинет 205', 'ПК разработчика 1'),
+('SU20502', 'PC-205-02', 'AMD Ryzen 9 5900X', 64, 2048.00, 1792.00, 'NVIDIA RTX 3080', 'Кабинет 205', 'ПК разработчика 2'),
+('SU20503', 'PC-205-03', 'Intel Core i9-12900K', 64, 2048.00, 1536.00, 'NVIDIA RTX 3090', 'Кабинет 205', 'Главный ПК разработки'),
+('SU20504', 'PC-205-04', 'Intel Core i5-12600K', 32, 1024.00, 768.25, 'NVIDIA RTX 3060', 'Кабинет 205', 'Тестовый ПК'),
+('SU20505', 'PC-205-05', 'AMD Ryzen 5 5600G', 16, 512.00, 384.00, 'AMD Radeon Graphics', 'Кабинет 205', 'Вспомогательный ПК'),
+
+-- Кабинет 310 (3 ПК)
+('SU31001', 'PC-310-01', 'Intel Xeon E-2288G', 128, 4096.00, 3072.00, 'NVIDIA RTX A4000', 'Кабинет 310', 'Сервер 1'),
+('SU31002', 'PC-310-02', 'Intel Xeon W-2275', 256, 8192.00, 6144.00, 'NVIDIA RTX A5000', 'Кабинет 310', 'Сервер 2'),
+('SU31003', 'PC-310-03', 'AMD EPYC 7302P', 128, 4096.00, 3584.00, 'AMD Radeon Pro W6800', 'Кабинет 310', 'Сервер 3');
+
+-- Заполняем таблицу peripheries (периферия)
+INSERT INTO peripheries (keyboard, mouse, mousepad, computer_name, description) VALUES
+-- Кабинет 101
+(TRUE, TRUE, TRUE, 'PC-101-01', 'Полный комплект Logitech'),
+(TRUE, TRUE, FALSE, 'PC-101-02', 'Клавиатура и мышь без коврика'),
+(TRUE, TRUE, TRUE, 'PC-101-03', 'Бюджетный комплект'),
+(TRUE, TRUE, TRUE, 'PC-101-04', 'Игровая периферия'),
+
+-- Кабинет 205
+(TRUE, TRUE, TRUE, 'PC-205-01', 'Механическая клавиатура'),
+(TRUE, TRUE, TRUE, 'PC-205-02', 'Эргономичный комплект'),
+(TRUE, TRUE, FALSE, 'PC-205-03', 'Премиальная периферия'),
+(TRUE, TRUE, TRUE, 'PC-205-04', 'Стандартный комплект'),
+(TRUE, TRUE, FALSE, 'PC-205-05', 'Базовый комплект'),
+
+-- Кабинет 310
+(TRUE, TRUE, TRUE, 'PC-310-01', 'Серверная периферия'),
+(TRUE, TRUE, TRUE, 'PC-310-02', 'Серверная периферия'),
+(TRUE, TRUE, TRUE, 'PC-310-03', 'Серверная периферия');
+
+-- Заполняем таблицу ups (ИБП)
+INSERT INTO ups (serial_number, brand, model, power, computer_name, description) VALUES
+('UPS10101', 'APC', 'Back-UPS Pro 1500', 865, 'PC-101-01', 'ИБП для рабочего ПК'),
+('UPS10102', 'Eaton', '5E 1000i', 600, 'PC-101-02', 'Резервный ИБП'),
+('UPS20501', 'CyberPower', 'CP1500PFCLCD', 900, 'PC-205-01', 'ИБП для разработчика'),
+('UPS20503', 'APC', 'Smart-UPS 2000', 1440, 'PC-205-03', 'ИБП для главного ПК'),
+('UPS31001', 'Tripp Lite', 'SMART3000RMXL', 2700, 'PC-310-01', 'Серверный ИБП'),
+('UPS31002', 'APC', 'Smart-UPS 3000', 2700, 'PC-310-02', 'Серверный ИБП');
+
+-- Заполняем таблицу monitors (мониторы)
+INSERT INTO monitors (serial_number, model, diagonal, computer_name, description) VALUES
+-- PC-101-01 (3 монитора)
+('MN1010101', 'Dell P2422H', 24.00, 'PC-101-01', 'Основной монитор'),
+('MN1010102', 'Dell P2422H', 24.00, 'PC-101-01', 'Дополнительный монитор'),
+('MN1010103', 'Dell P2722H', 27.00, 'PC-101-01', 'Вертикальный монитор'),
+
+-- PC-101-02 (2 монитора)
+('MN1010201', 'LG 27UL500-W', 27.00, 'PC-101-02', '4K монитор'),
+('MN1010202', 'LG 24MK400H-B', 24.00, 'PC-101-02', 'Дополнительный монитор'),
+
+-- PC-101-03 (2 монитора)
+('MN1010301', 'Acer V246HQL', 24.00, 'PC-101-03', 'Базовый монитор'),
+('MN1010302', 'Acer V246HQL', 24.00, 'PC-101-03', 'Базовый монитор'),
+
+-- PC-101-04 (4 монитора)
+('MN1010401', 'Samsung Odyssey G7', 32.00, 'PC-101-04', 'Игровой монитор'),
+('MN1010402', 'Samsung U28R550', 28.00, 'PC-101-04', 'Дополнительный монитор'),
+('MN1010403', 'Samsung U28R550', 28.00, 'PC-101-04', 'Дополнительный монитор'),
+('MN1010404', 'Samsung U28R550', 28.00, 'PC-101-04', 'Дополнительный монитор'),
+
+-- PC-205-01 (3 монитора)
+('MN2050101', 'ASUS ProArt PA278QV', 27.00, 'PC-205-01', 'Монитор для дизайна'),
+('MN2050102', 'ASUS ProArt PA278QV', 27.00, 'PC-205-01', 'Монитор для дизайна'),
+('MN2050103', 'ASUS ProArt PA278QV', 27.00, 'PC-205-01', 'Монитор для дизайна'),
+
+-- PC-205-02 (2 монитора)
+('MN2050201', 'LG 34WN80C-B', 34.00, 'PC-205-02', 'Широкоформатный монитор'),
+('MN2050202', 'LG 27UN880-B', 27.00, 'PC-205-02', 'Эргономичный монитор'),
+
+-- PC-205-03 (4 монитора)
+('MN2050301', 'Dell UltraSharp U4320Q', 43.00, 'PC-205-03', 'Основной большой монитор'),
+('MN2050302', 'Dell UltraSharp U2723QE', 27.00, 'PC-205-03', 'Дополнительный монитор'),
+('MN2050303', 'Dell UltraSharp U2723QE', 27.00, 'PC-205-03', 'Дополнительный монитор'),
+('MN2050304', 'Dell UltraSharp U2723QE', 27.00, 'PC-205-03', 'Дополнительный монитор'),
+
+-- PC-205-04 (2 монитора)
+('MN2050401', 'HP E27m G4', 27.00, 'PC-205-04', 'Тестовый монитор 1'),
+('MN2050402', 'HP E27m G4', 27.00, 'PC-205-04', 'Тестовый монитор 2'),
+
+-- PC-205-05 (2 монитора)
+('MN2050501', 'AOC 24B2XH', 24.00, 'PC-205-05', 'Базовый монитор'),
+('MN2050502', 'AOC 24B2XH', 24.00, 'PC-205-05', 'Базовый монитор'),
+
+-- PC-310-01 (2 монитора)
+('MN3100101', 'Dell P2422H', 24.00, 'PC-310-01', 'Серверный монитор 1'),
+('MN3100102', 'Dell P2422H', 24.00, 'PC-310-01', 'Серверный монитор 2'),
+
+-- PC-310-02 (2 монитора)
+('MN3100201', 'Dell P2422H', 24.00, 'PC-310-02', 'Серверный монитор 1'),
+('MN3100202', 'Dell P2422H', 24.00, 'PC-310-02', 'Серверный монитор 2'),
+
+-- PC-310-03 (2 монитора)
+('MN3100301', 'Dell P2422H', 24.00, 'PC-310-03', 'Серверный монитор 1'),
+('MN3100302', 'Dell P2422H', 24.00, 'PC-310-03', 'Серверный монитор 2');
+
+
+_______________________________________________
+CREATE TABLE roles (
+    role VARCHAR(20) PRIMARY KEY,
+    description VARCHAR(255)
+);
+
+CREATE TABLE users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(50) NOT NULL,
+    role VARCHAR(20),
+    FOREIGN KEY (role) REFERENCES roles(role),
+    description VARCHAR(255)
+);

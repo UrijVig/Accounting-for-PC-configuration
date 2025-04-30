@@ -15,14 +15,14 @@
         public function getAllRecord(string $tableName){
             return $this->ds->readAll($tableName);
         }
-        public function removeRecordByTarget(string $tableName, string $target){
+        public function removeRecordByTarget(string $tableName, string $column, string $target){
             try{
-                $this->ds->deleteByTarget($tableName, $target);
+                $this->ds->deleteByTarget($tableName, $column, $target);
             } catch (PDOException $e) {
                 throw $e;
             }
         }
-        public function updateRecordByTarget(string $tableName , string $target, array $data){
-            $this->ds->updateByTarget($tableName, $target, $data);
+        public function updateRecordByTarget(string $tableName, string $column, string $target, array $data){
+            $this->ds->updateByTarget($tableName, $column, $target, $data);
         }
     }

@@ -14,9 +14,9 @@
         <nav>
             <ul>
             <li><a href="/">Главная страница</a></li>
-            <li><a href="/info">Инфо!</a></li>
-            <li><a href="/createSystemUnit">Добавить системный блок</a></li>
-            <li><a href="/createMonitor">Добавить монитор</a></li>
+            <li><a href="/storageInfo">Склад</a></li>
+            <li><a href="/officeInfo">Офис</a></li>
+            <li><a href="/">Личный кабинет</a></li>
         </ul>
         </nav>
     </header>

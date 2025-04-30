@@ -1,4 +1,4 @@
-<?php if (!empty($system_units) && is_array($system_units)): ?>
+<?php if (!empty($system_units)): ?>
     <?php foreach ($system_units as $sdata): ?>
         <div class="system-unit">
             <h3>Computer: <?= htmlspecialchars($sdata['computer_name'] ?? 'N/A') ?></h3>

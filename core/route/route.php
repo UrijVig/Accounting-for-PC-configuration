@@ -1,7 +1,7 @@
 <?php 
     class Route {
         public static function start(): void {
-            $controllerName = "Main";
+            $controllerName = "ReadOffice";
             $actionName = "index";
             
             $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
@@ -20,7 +20,7 @@
             
             try {
                 $controller = new $controllerName();
-                
+                // echo $controllerName;
                 if (method_exists($controller, $actionName)) {
                     // Передаем метод запроса и параметры
                     $controller->$actionName($_SERVER['REQUEST_METHOD'], $params ?? []);
@@ -29,6 +29,7 @@
                 }
             } catch (Throwable $e) {
                 // Обработка ошибок
+                echo $e->getMessage();
                 (new MainController())->action500();
             }
         }
