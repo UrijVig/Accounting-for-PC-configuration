@@ -7,12 +7,12 @@
         }
         abstract protected function render($val);
 
-        public function action404()
+        public function action404(string $method,array $param)
         {
             header("HTTP/1.1 404 Not Found");
             header("Status: 404 Not Found");
         }
-        public function action500()
+        public function action500(string $method,array $param)
         {
             header("HTTP/1.1 500 Internal Server Error");
             header("Status: 500 Internal Server Error");

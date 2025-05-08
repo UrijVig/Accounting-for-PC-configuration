@@ -1,7 +1,7 @@
 <?php 
     class Route {
         public static function start(): void {
-            $controllerName = "ReadOffice";
+            $controllerName = "CRUD";
             $actionName = "index";
             
             $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
@@ -30,7 +30,7 @@
             } catch (Throwable $e) {
                 // Обработка ошибок
                 echo $e->getMessage();
-                (new MainController())->action500();
+                (new MainController())->action500($_SERVER['REQUEST_METHOD'],$params ?? []);
             }
         }
     }

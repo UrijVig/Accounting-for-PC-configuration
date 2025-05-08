@@ -6,30 +6,30 @@
         public function __construct() {
             parent::__construct(new View(DIR_TMPL));
         }
-        public function action404(){
-            parent::action404();
+        public function action404(string $method,array $param){
+            parent::action404($method, $param);
             $this->title = "Page not found - 404";
             $this->meta_desc = "Page is not exist";
             $this->meta_key = "error 404";
             $content = $this->view->render("404", array(), true);
             $this->render($content);
         }
-        public function action500(){
-            parent::action500();
+        public function action500(string $method,array $param){
+            parent::action500( $method, $param);
             $this->title = "Internal Server Error - 500";
             $this->meta_desc = "Internal Server Error";
             $this->meta_key = "error 500";
             $content = $this->view->render("500", array(), true);
             $this->render($content);
         }
-        public function actionIndex(){
+        public function actionIndex(string $method,array $param){
             $this->title = "Index";
             $this->meta_desc = "Описание главной страницы";
             $this->meta_key = "описание, описание главной страницы";
             $content = $this->view->render("index", array(), true);
             $this->render($content);
         }
-        public function actionPersonalPage(){
+        public function actionPersonalPage(string $method,array $param){
 
         }
 

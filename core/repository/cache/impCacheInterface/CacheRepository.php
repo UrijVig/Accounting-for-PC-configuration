@@ -22,7 +22,7 @@
     public function invalidateAll(){
         foreach ($this->repository as $key => $value) {
             $value->invalidate();
-        }
+        } $this->loadAll();
     }
     public function loadCache(string $tableName){
         if (!$this->repository[$tableName]->isActual())
@@ -34,9 +34,11 @@
     }
     public function invalidateCache(string $tableName){
         $this->repository[$tableName]->invalidate();
+        $this->loadCache($tableName);
     }
-    public function getFromCacheByTarget(string $tableName, string $target){
-        return $this->repository[$tableName]->getFromCacheByTarget($target);
+    public function getFromCacheByTarget(string $tableName, string $column, string $target){
+        $this->loadCache($tableName);
+        return $this->repository[$tableName]->getFromCacheByTarget($column, $target);
     }
     
  }

@@ -15,10 +15,17 @@
         public function getCache(){
             return $this->cache;
         }
-        public function getFromCacheByTarget(string $target){
-            foreach ($this->cache as $row){
-                if (in_array($target, $row)) return $row;
-            } throw new InvalidArgumentException("Invalid Target");            
+
+        public function getFromCacheByTarget(string $column, string $target): ?array
+        {
+            foreach ($this->cache as $row) {
+                if (isset($row[$column]) && $row[$column] == $target) {
+                    
+                    return $row;
+                }
+            }
+            
+            return null;
         }
 
         public function loadCache(array $data){

@@ -1,12 +1,17 @@
-<?php 
+<?php
+
+use Dom\Document;
+
     class DataService{ 
         private DataBaseConnection $dbc;
         private DataSource $ds;
+        private string $dbName;
         private DBRepositoryInterface $dBRepository;
         private DBRepositoryManager $dBRepositoryManager;
         private CacheRepositoryInterface $cacheRepository;
         public function __construct(array $config) {
             $this->dbc = $this->connectDB($config);
+            $this->dbName = $config['dbname'];
             $this->ds = new DataSource($this->dbc);
             $this->dBRepository = new DBRepository($this->ds);
             $this->dBRepositoryManager = new DBRepositoryManager($this->dBRepository, $config['tables']);
@@ -21,46 +26,29 @@
             );
         }
         
-        public function getDataFromTable(array $tableNames):array {
+        public function getDataFromTables(array $tableNames):array {
             $data = [];
             foreach ($tableNames as $tableName){
                 $data[$tableName] = $this->cacheRepository->getCache($tableName);
             }
             return $data;
         }
-
-        public function getData():array {
-            $data = $this->cacheRepository->getAll();
-            $monitorByComputer = [];
-            $upsByComputer = [];
-            $peripheriesByComputer =[];
-            foreach ($data['monitors'] as $monitor){
-                $monitorByComputer[$monitor['computer_name']][] = $monitor;
-            }
-            foreach ($data['ups'] as $ups) {
-                $upsByComputer[$ups['computer_name']] = $ups;
-            }
-            foreach ($data['peripheries'] as $peripherie) {
-                $peripheriesByComputer[$peripherie['computer_name']] = $peripherie;
-            }
-            $workplaces = [];
-            foreach($data['system_units'] as $unit){
-                $unit['monitors'] = $monitorByComputer[$unit['computer_name']] ?? [];
-                $unit['ups'] = $upsByComputer[$unit['computer_name']] ?? [];
-                $unit['peripheries'] = $peripheriesByComputer[$unit['computer_name']] ?? [];
-                $workplaces[] = $unit;
-            }
-            $workplaceByLocationName = [];
-            foreach ($workplaces as $wp) {
-                $workplaceByLocationName[$wp['location']][] = $wp;
-            }
-            $result = [];
-            foreach ($data['locations'] as $loc) {
-                $loc['workplaces'] = $workplaceByLocationName[$loc['name']];
-                $result[] = $loc;
-            }
-            return $result;
+        public function getDataFromTableByTarget($tableName, $column, $target){
+            return $this->cacheRepository->getFromCacheByTarget($tableName, $column, $target);
         }
-    // 'tables' => ['system_units', 'peripheries','ups','monitors','locations']
+
+        public function getFormattedData():array {
+            $data = $this->cacheRepository->getAll();
+            return DataDesigner::getDetails($data, $this->dbName);
+        }
+
+        public function deleteRecord(string $tablename,string $column,string $target) {
+            $this->dBRepositoryManager->delegate($tablename, "removeRecordByTarget", $column,null, $target);
+            $this->cacheRepository->invalidateCache($tablename);
+        }
+        public function updateRecord(string $tablename, array $data, string $column, string $target){
+            $this->dBRepositoryManager->delegate($tablename, "updateRecordByTarget", $column, $data, $target);
+            $this->cacheRepository->invalidateCache($tablename);
+        }
 
     }
